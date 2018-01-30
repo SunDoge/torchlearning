@@ -1,4 +1,4 @@
-from meter import *
+from .meter import *
 
 import torch
 
@@ -11,7 +11,8 @@ class AttrDict(dict):
 class DefaultClassificationEngine(object):
     def __init__(self,hooks={}):
         self.hooks = hooks
-        self.hooks["on_init"]()
+        if "on_init" in hooks:
+            self.hooks["on_init"]()
         self.records = {}
 
         self.cudable =torch.cuda.is_available()
@@ -87,5 +88,6 @@ class DefaultClassificationEngine(object):
         self.hook('on_end', state)
         return state
 
-    def close(self):
-        self.hooks["on_destroy"]()
+    def destroy(self):
+        if "on_destroy" in hooks:
+            self.hooks["on_destroy"]()
