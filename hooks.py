@@ -40,8 +40,8 @@ def acc_meter_update(state):
 
 def report_progress(state):
     strs = []
-    strs.append("Epoch={}".format(state["epoch"]))
+    strs.append("Epoch={}".format(state.get("epoch","VAL")))
     for name, item in state.items():
         if isinstance(item, Meter):
-            strs = item.__str__()
-    return " ".join(strs)
+            strs.append(item.__str__())
+    return print(" ".join(strs))
