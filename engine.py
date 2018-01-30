@@ -63,34 +63,34 @@ class DefaultClassificationEngine(object):
         return state
 
 
-def validate(self, network, iterator):
-    state = {
-        "engine": self,
-        'network': network,
-        'iterator': iterator,
-        't': 0,
-        'train': False,
-    }
+    def validate(self, network, iterator):
+        state = {
+            "engine": self,
+            'network': network,
+            'iterator': iterator,
+            't': 0,
+            'train': False,
+        }
 
-    self.hook('on_start', state)
-    for sample in state['iterator']:
-        state['sample'] = sample
-        self.hook('on_sample', state)
+        self.hook('on_start', state)
+        for sample in state['iterator']:
+            state['sample'] = sample
+            self.hook('on_sample', state)
 
-        def closure():
-            loss, output = state['network'](state['sample'])
-            state['output'] = output
-            state['loss'] = loss
-            self.hook('on_forward', state)
-            # to free memory in save_for_backward
-            state['output'] = None
-            state['loss'] = None
+            def closure():
+                loss, output = state['network'](state['sample'])
+                state['output'] = output
+                state['loss'] = loss
+                self.hook('on_forward', state)
+                # to free memory in save_for_backward
+                state['output'] = None
+                state['loss'] = None
 
-        closure()
-        state['t'] += 1
-    self.hook('on_end', state)
-    return state
+            closure()
+            state['t'] += 1
+        self.hook('on_end', state)
+        return state
 
 
-def destroy(self):
-    self.hook("on_destroy", None)
+    def destroy(self):
+        self.hook("on_destroy", None)
