@@ -11,15 +11,17 @@ class AttrDict(dict):
 class DefaultClassificationEngine(object):
     def __init__(self,hooks={}):
         self.hooks = hooks
-        if "on_init" in hooks:
-            self.hooks["on_init"]()
-        self.records = {}
+        self.hook("on_init",None)
 
         self.cudable =torch.cuda.is_available()
 
     def hook(self, name, state):
         if name in self.hooks:
-            self.hooks[name](state)
+            for f in self.hooks[name]:
+                if state is None:
+                    f()
+                else:
+                    f(state)
 
     def train(self, network, iterator, maxepoch, optimizer):
         state = {
@@ -89,5 +91,4 @@ class DefaultClassificationEngine(object):
         return state
 
     def destroy(self):
-        if "on_destroy" in hooks:
-            self.hooks["on_destroy"]()
+        self.hook("on_destroy", None)
