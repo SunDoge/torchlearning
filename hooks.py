@@ -27,7 +27,15 @@ def loss_meter_initialize(state):
 
 
 def acc_meter_initialize(state):
-    state.update(dict(loss_meter=LossMeter()))
+    state.update(dict(acc_meter=AccuracyMeter()))
+
+def loss_meter_update(state):
+    state["loss_meter"].add(state["loss"])
+
+
+def acc_meter_update(state):
+    _,targets = state["sample"]
+    state["acc_meter"].add(targets,state["output"])
 
 
 def report_progress(state):
