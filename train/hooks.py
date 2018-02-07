@@ -1,5 +1,7 @@
 from torch.autograd import Variable
-from .meter import *
+from meter.meter import Meter
+from meter.loss_meter import LossMeter
+from meter.accuracy_meter import AccuracyMeter
 
 
 def cudalize(state):

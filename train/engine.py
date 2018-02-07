@@ -1,4 +1,4 @@
-from .meter import *
+from meter.meter import *
 
 import torch
 
