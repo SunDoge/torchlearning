@@ -1,5 +1,5 @@
 import time
-from meter.meter import Meter
+from torchlearning.meter import Meter
 
 class TimeMeter(Meter):
     def __init__(self):

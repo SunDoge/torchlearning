@@ -1,5 +1,5 @@
 import torch
-from meter.meter import Meter
+from torchlearning.meter import Meter
 from torch.autograd import Variable
 
 class AccuracyMeter(Meter):
