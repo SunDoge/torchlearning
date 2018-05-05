@@ -1,5 +1,6 @@
 import time
-from torchlearning.meter import Meter
+import math
+from .meter import Meter
 
 class TimeMeter(Meter):
     def __init__(self):
@@ -10,11 +11,16 @@ class TimeMeter(Meter):
         self.n = 0
         self.time = time.time()
 
+    @property
     def value(self):
         return time.time() - self.time
 
+    @property
+    def record(self):
+        return dict(eplased_time=self.value)
+
     def __str__(self):
-        duration_decimal,duration_integer = math.modf(self.value())
+        duration_decimal,duration_integer = math.modf(self.value)
         strs = []
         if duration_integer > 24 * 60 * 60:
             days = duration_integer // (24 * 60 * 60)
