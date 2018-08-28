@@ -3,10 +3,13 @@ class Meter(object):
         pass
 
     def reset(self):
-        pass
+        raise NotImplementedError()
 
-    def add(self, *args, **kwargs):
-        pass
+    def update(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    def attach(self,engine):
+        raise NotImplementedError()
 
     @property
     def value(self):

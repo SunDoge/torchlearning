@@ -1,14 +1,15 @@
 import time
 import math
 from .meter import Meter
+from torchlearning.engine import Engine, Event, Context
+
 
 class TimeMeter(Meter):
     def __init__(self):
         super(TimeMeter, self).__init__()
         self.reset()
 
-    def reset(self):
-        self.n = 0
+    def reset(self, *args, **kwargs):
         self.time = time.time()
 
     @property
@@ -19,8 +20,12 @@ class TimeMeter(Meter):
     def record(self):
         return dict(eplased_time=self.value)
 
+    def attach(self, engine: Engine):
+        engine.ctx.plugins["timer"] = self
+        engine.add_event_handler(Event.STAGE_STARTED, self.reset)
+
     def __str__(self):
-        duration_decimal,duration_integer = math.modf(self.value)
+        duration_decimal, duration_integer = math.modf(self.value)
         strs = []
         if duration_integer > 24 * 60 * 60:
             days = duration_integer // (24 * 60 * 60)

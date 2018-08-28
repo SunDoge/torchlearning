@@ -18,7 +18,7 @@ def variablize(state):
 
 
 def network_specialize(state):
-    if state["train"]:
+    if state["engine"]:
         state["network"].train()
     else:
         state["network"].eval()
@@ -32,12 +32,12 @@ def acc_meter_initialize(state):
     state.update(dict(acc_meter=AccuracyMeter()))
 
 def loss_meter_update(state):
-    state["loss_meter"].add(state["loss"])
+    state["loss_meter"].add_obeject(state["loss"])
 
 
 def acc_meter_update(state):
     _,targets = state["sample"]
-    state["acc_meter"].add(targets,state["output"])
+    state["acc_meter"].add_obeject(targets, state["output"])
 
 
 def report_progress(state):

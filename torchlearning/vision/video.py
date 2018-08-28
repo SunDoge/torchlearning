@@ -9,31 +9,44 @@ class VideoReadError(Exception):
         return self.value
 
 class Video(object):
-    def __init__(self,video_filename):
-        self.video = cv2.VideoCapture(video_filename)
-        if not self.video.isOpened():
+    def __init__(self, video_filename):
+        self.video_filname = video_filename
+        self.handler = cv2.VideoCapture(video_filename)
+        if not self.handler.isOpened():
             raise VideoReadError(f"An unknown error is happened while opening '{video_filename}' with opencv.")
-        self.n_frames = int(self.video.get(cv2.CAP_PROP_FRAME_COUNT))
-        self.video_width = int(self.video.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.video_height = int(self.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.n_frames = int(self.handler.get(cv2.CAP_PROP_FRAME_COUNT))
+        self.video_width = int(self.handler.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self.video_height = int(self.handler.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.video_channels = 3
         self.frames = []
-        self.__get_all_frames()
-        self.frames = numpy.array(self.frames)
 
-    def __get_all_frames(self):
+    def get_all_frames(self):
+        self.handler.set(cv2.CAP_PROP_POS_FRAMES, 0.0)
         while True:
-            flag, frame = self.video.read()
+            flag, frame = self.handler.read()
             if flag:
                 self.frames.append(frame)
             else:
-                break
+                return self.frames
 
-    def get_frames(self, index_range="all"):
-        if index_range == "all":
-            return self.frames
+    def frame_at(self, index: int):
+        if index >= self.n_frames or index < 0:
+            raise IndexError("Try to access a frame whose index({}) is out of the number({}) of video frames."
+                             .format(index, self.n_frames))
+
+        if self.frames:
+            return self.frames[index]
         else:
-            return self.frames[index_range]
+            status = self.handler.set(cv2.CAP_PROP_POS_FRAMES, index)
+            if status:
+                flag, frame = self.handler.read()
+                if flag:
+                    return frame
+                else:
+                    return None
+            else:
+                raise Exception("Unkown error while accessing a frame from video({})."
+                                .format(self.video_filname))
 
     def __del__(self):
-        self.video.release()
+        self.handler.release()

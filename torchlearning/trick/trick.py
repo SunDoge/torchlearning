@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from matplotlib.backends.backend_pdf import PdfPages
 
-from ..logger.recorder import Recorder
+from ..logging.trainrecorder import TrainRecorder
 
+plt.switch_backend('agg')
 
 
 def set_learning_rate(optimizer, lr):
@@ -27,7 +28,7 @@ class LRAnalyzer(object):
         self.criterion = criterion
         self.n_iters = len(self.loader)
         self.history_loss = 0.
-        self.recorder = Recorder(name="LRAnalyze")
+        self.recorder = TrainRecorder(name="LRAnalyze")
 
     def set_explore_scope(self, scope=(1e-5, 1)):
         if not isinstance(scope, tuple):
