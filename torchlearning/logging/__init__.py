@@ -3,8 +3,10 @@ import sys
 import time
 import logging
 
-timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
-experiment_path = os.path.join("experiments", timestamp)
+experiment_path = os.environ.get("experiment_path")
+if experiment_path is None:
+    timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    experiment_path = os.path.join("experiments", timestamp)
 os.makedirs(experiment_path, exist_ok=False)
 
 logger = logging.getLogger("torchlearning")
