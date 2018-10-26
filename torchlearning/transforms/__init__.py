@@ -17,4 +17,4 @@ class Bytes2Image(object):
         self.mode = mode
 
     def __call__(self, bytes):
-        F.bytes2image(bytes, self.mode)
+        return F.bytes2image(bytes, self.mode)
