@@ -22,7 +22,7 @@ class Saver(Plugin):
             else:
                 pure_name = "{}@e{}i{}.pth".format(self.prefix, ctx.epoch, ctx.iteration)
             save_path = os.path.join(experiment_path, pure_name)
-            torch.save(ctx.net.cpu().state_dict(), save_path)
+            torch.save(ctx.net.state_dict(), save_path)
 
             if self.exclude and self.last_save is not None:
                 os.remove(self.last_save)
