@@ -1,5 +1,5 @@
 class LargerMetric(object):
-    def __init__(self, initial_value=float("-inf"), attribute_map=None):
+    def __init__(self, initial_value=float("-inf"), attribute_map=lambda x: x):
         self.current_value = initial_value
         self.attribute_map=attribute_map
 
@@ -12,7 +12,7 @@ class LargerMetric(object):
 
 
 class SmallerMetric(object):
-    def __init__(self, initial_value=float("inf"), attribute_map=None):
+    def __init__(self, initial_value=float("inf"), attribute_map=lambda x: x):
         self.current_value = initial_value
         self.attribute_map = attribute_map
 
